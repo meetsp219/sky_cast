@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:sky_cast/screens/city_screen.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
@@ -31,7 +32,14 @@ class _WeatherScreenState extends State<WeatherScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CityScreen(),
+                ),
+              );
+            },
             icon: const Icon(
               Icons.location_city,
               size: 50,

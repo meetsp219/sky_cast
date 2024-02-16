@@ -18,7 +18,7 @@ class _SkyCastState extends State<SkyCast> {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: CityScreen(),
+      home: LoadingScreen(),
     );
   }
 }
