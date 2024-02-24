@@ -2,21 +2,41 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:sky_cast/screens/city_screen.dart';
+import 'package:sky_cast/services/weather.dart';
 
 class WeatherScreen extends StatefulWidget {
-  const WeatherScreen({super.key});
+  final locationWeather;
+
+  const WeatherScreen(this.locationWeather);
 
   @override
   State<WeatherScreen> createState() => _WeatherScreenState();
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
+  int? temperature;
+  int? condition;
+  String? cityName;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.locationWeather);
+    updateUI(widget.locationWeather);
+  }
+
+  void updateUI(dynamic weatherData) {
+    condition = weatherData['weather'][0]['id'];
+    double temp = weatherData['main']['temp'];
+    temperature = temp.round();
+    cityName = weatherData['name'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.teal,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         leading: IconButton(
           icon: Transform.rotate(
             angle: 45 * pi / 180,
@@ -49,18 +69,22 @@ class _WeatherScreenState extends State<WeatherScreen> {
         ],
       ),
       body: Container(
-        // decoration: const BoxDecoration(
-        //   image: DecorationImage(
-        //     image: AssetImage('images/weather_background.jpg'),
-        //     fit: BoxFit.cover,
-        //   ),
-        // ),
+        height: double.infinity,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/location_background.jpg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+                Colors.white.withOpacity(0.8), BlendMode.dstATop),
+          ),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              '24' + '°',
+              '$temperature°' + WeatherModel().getWeatherIcon(condition ?? 0),
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 70,
@@ -68,7 +92,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
               ),
             ),
             Text(
-              'you have this message from this location',
+              WeatherModel().getMessage(temperature ?? 0),
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 40,
